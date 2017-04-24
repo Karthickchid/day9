@@ -1,0 +1,404 @@
+1.
+CREATE FILE
+
+package FileHandling;
+
+import java.io.File;
+import java.io.IOException;
+
+public class FileDeomo {
+public static void main(String[] args) {
+ File f=new File(" data.txt ");
+ if(f.exists())
+	 System.out.println("File exists.........");
+else
+	try {
+		if(f.createNewFile())
+				System.out.println("File created");
+		else
+				System.out.println(" ERROR ");
+	} catch (IOException e) {
+		e.printStackTrace();
+	} 
+}
+}
+
+OP
+File created
+data.txt
+**********************************************************************
+2.
+FILE INPUTSTREAM
+
+package FileHandling;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+public class FileIS {
+
+	public static void main(String[] args) {
+		File f=new File(" data.txt");
+		try {
+			FileInputStream fis=new FileInputStream(f);
+			int chh; 
+			while((chh=fis.read())!=-1)
+			 {
+				 System.out.print((char)chh);
+			 }
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+data.txt
+hiiiiiiii
+
+OP
+hiiiiiiii
+********************************************************************************************
+3.
+FILE READER
+package FileHandling;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class FR {
+
+	public static void main(String[] args) {
+		try {
+			FileReader fr=new FileReader(" data.txt");
+			int vj;
+			while((vj=fr.read())!=-1)
+			{
+				System.out.print((char)vj);
+			}
+		} catch (FileNotFoundException e) {
+			
+			e.printStackTrace();
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+OP
+hiiiiiiii
+************************************************************************************
+4.
+FILE OP STREAM
+package FileHandling;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class FileCopy {
+public static void main(String[] args) {
+	try {
+		FileInputStream fis=new FileInputStream("source.txt");
+		FileOutputStream fos=new FileOutputStream("dest.txt");
+		int sj;
+		while((sj=fis.read())!=-1)
+		{
+			fos.write((char)sj);
+		}
+		fis.close();
+		fos.close();
+	} catch (FileNotFoundException e) {
+		
+		e.printStackTrace();
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+}
+}
+
+OP:
+SOURCE.TXT
+java
+DEST.TXT
+java
+********************************************************************************
+5.
+SERIALIZATION AND DESERIALIZATION
+
+package FileHandling;
+import java.io.Serializable;
+public class Pizza implements Serializable {
+	private	String name;
+	private int qty;
+	public Pizza(String name, int qty) {
+		super();
+		this.name = name;
+		this.qty = qty;
+	}
+	@Override
+	public String toString() {
+		return "Pizza [name=" + name + ", qty=" + qty + "]";
+	}
+	
+}
+------------------
+package FileHandling;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+public class PizzaHut {
+public static void main(String[] args) {
+	
+				Pizza p=new Pizza("xxxx", 6);
+				//1.SERIALIZATION-FOS AND OOS
+				
+			 try {
+					FileOutputStream fos=new FileOutputStream("Pizzainfo.txt");
+					ObjectOutputStream oos=new ObjectOutputStream(fos);
+					oos.writeObject(p);
+					fos.close();
+					oos.close();
+					
+					//2.Deserialization-FIS,OIS
+					FileInputStream fis=new FileInputStream("Pizzainfo.txt");
+					ObjectInputStream ois=new ObjectInputStream(fis);
+					Pizza p1=(Pizza) ois.readObject();
+					System.out.println(p1);
+					fis.close();
+					ois.close();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+}
+}
+
+OP:
+Pizza [name=xxxx, qty=6]
+*********************************************************************************
+7.
+package FileHandling;
+import java.io.Serializable;
+public class Pizza implements Serializable {
+	private	String name;
+	private int qty;
+	public Pizza(String name, int qty) {
+		super();
+		this.name = name;
+		this.qty = qty;
+	}
+	@Override
+	public String toString() {
+		return  +name  "|" qty+ ;
+	}
+	
+}
+---------------
+package FileHandling;
+import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+public class WritePizzaToFile {
+public static void main(String[] args) {
+	//1.create an object
+		Pizza p=new Pizza("xxx", 6);
+		//2.write obj into file FOS,DOS
+		try {
+			FileOutputStream fos=new FileOutputStream("pizza.txt");
+			DataOutputStream dos=new DataOutputStream(fos);
+			dos.writeBytes(p.toString());
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+}
+}
+
+******************************************************************************************
+8.
+package FileHandling;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+public class ReadCSV1 {
+	public static void main(String[] args) {
+		try 
+		{
+			//reading file
+			FileReader fr=new FileReader("mycsv.txt");
+			BufferedReader br=new BufferedReader(fr);
+			String str;
+			while((str=br.readLine())!=null)
+			{
+				String s[]=str.split(",");
+				double d=Double.parseDouble(s[0]);
+				System.out.println(d);
+				String n1=s[1];
+				System.out.println(n1);
+				String n2=s[2];
+				System.out.println(n2);
+				int ival=Integer.parseInt(s[3]);
+				System.out.println(ival);
+				
+			}
+		}
+		catch (FileNotFoundException e1)
+		{
+			e1.printStackTrace();
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
+	}
+}
+*****************************************************************************
+9.
+package FileHandling;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.StringTokenizer;
+public class ReadCSV2 {
+	public static void main(String[] args) {
+		try {
+			FileReader fr=new FileReader("mycsv.txt");
+			BufferedReader br=new BufferedReader(fr);
+			String msg;
+			while((msg=br.readLine())!=null){
+				StringTokenizer st=new StringTokenizer(msg,",");
+				while(st.hasMoreTokens()){					
+					double sal=Double.parseDouble(st.nextToken());
+					System.out.println(sal);
+					String fname=st.nextToken();
+					System.out.println(fname);
+					String lname=st.nextToken();				
+					System.out.println(lname);
+					int empid=Integer.parseInt(st.nextToken());
+					System.out.println(empid);
+				}
+			}	
+			fr.close();
+			br.close();
+		} catch (FileNotFoundException e) {		
+			e.printStackTrace();
+		} catch (IOException e) {		
+			e.printStackTrace();
+		}
+	}
+}
+******************************************************************************************
+10.
+package FileHandling;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Scanner;
+public class ReadCSV3 {
+	public static void main(String[] args) {
+		try {
+			FileReader fis=new FileReader("mycsv.txt");
+			BufferedReader br=new BufferedReader(fis);
+			String msg;
+			//int i=0;
+			Scanner sc;
+			//product p[]=new product[]
+			while((msg=br.readLine())!=null)
+			{
+				sc=new Scanner(msg);
+				sc.useDelimiter(",");
+				double sal=sc.nextDouble();
+				System.out.println(sal);
+				String fname=sc.next();
+				System.out.println(fname);
+				String lname=sc.next();
+				System.out.println(lname);
+				int eid=sc.nextInt();
+				System.out.println(eid);
+			}
+
+		} catch (FileNotFoundException e) {
+
+			e.printStackTrace();
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
+	}
+}
+***********************************************************************************************
+11.
+package FileHandling;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+public class FRBR {
+	public static void main(String[] args) {
+		FileReader fr=null;
+		FileWriter fw=null;
+		BufferedReader br=null;
+		BufferedWriter bw=null;
+
+		try {
+			fr=new FileReader("source1.txt");
+			fw=new FileWriter("dest1.txt");
+			br=new BufferedReader(fr);
+			bw=new BufferedWriter(fw);
+
+			String data;
+			while((data=br.readLine())!=null)
+			{
+				bw.write(data);
+			}
+
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		finally
+		{
+			try {
+				bw.close();
+				br.close();
+				fw.close();
+				fr.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+
+	}
+}
+
+****************************************************************************************
